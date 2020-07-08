@@ -13,7 +13,7 @@
       <div id="workspace" class="bg-gray-100 border-4 border-gray-400 relative" :style="[workspace, areaScaleStyle]">
         <div v-for="(feature, index) in features" :key="index" :id="sanitizeText(feature.name)" v-on:click="editFeature(index)" class="flex justify-center items-center text-center absolute cursor-pointer" :style="featureStyles(index)">{{ feature.name }}</div>
 
-        <svg id="connections" v-if="showConnections" class="absolute top-0 right-0 bottom-0 left-0 w-full h-full">
+        <svg id="connections" v-if="showConnections" class="absolute top-0 right-0 bottom-0 left-0 w-full h-full pointer-events-none">
           <defs>
             <marker id="positive" orient="auto" markerWidth="60" markerHeight="80" refX="20" refY="6">
               <path d="M0,0 V12 L10,6 Z" fill="red" />
@@ -215,10 +215,98 @@
               </span>
             </div>
           </div>
-          <div class="flex justify-end">
-            <button v-on:click="cancelFeature" class="bg-white hover:bg-red-500 text-gray-600 border border-blue-500 hover:border-transparent hover:text-white mr-4 text-sm font-bold py-2 px-4 rounded">Cancel</button>
-            <button v-on:click="addFeature" v-if="addingFeature && !updatingFeature" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Add Feature</button>
-            <button v-on:click="updateFeature" v-if="updatingFeature" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Update Feature</button>
+          <div class="flex justify-between mt-12">
+            <div class="">
+              <button v-on:click="deleteFeature" v-if="updatingFeature" class="bg-white bg-red-400 hover:bg-red-600 text-white border border-red-400 hover:border-transparent mr-4 text-sm font-bold py-2 px-4 rounded">Delete</button>
+            </div>
+            <div class="">
+              <button v-on:click="cancelFeature" class="bg-white hover:bg-red-500 text-gray-600 border border-blue-500 hover:border-transparent hover:text-white mr-4 text-sm font-bold py-2 px-4 rounded">Cancel</button>
+              <button v-on:click="addFeature" v-if="addingFeature && !updatingFeature" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Add Feature</button>
+              <button v-on:click="updateFeature" v-if="updatingFeature" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Update Feature</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-gray-100 border-b-2 border-l-2 border-gray-300">
+        <header class="bg-gray-200 px-6 border-b-1 border-gray-300 flex justify-between">
+          <h2 class="uppercase tracking-wide text-gray-700 text-sm font-bold mb-0 py-3">Terminals</h2>
+          <button v-on:click="addingTerminal = !addingTerminal" class="flex items-center px-2 py-3 text-gray-500">
+            <svg class="fill-current h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path v-if="!addingTerminal" d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/><path v-if="addingTerminal" d="M10.707 7.05L10 6.343 4.343 12l1.414 1.414L10 9.172l4.243 4.242L15.657 12z"/></svg>
+          </button>
+        </header>
+
+        <div v-if="addingTerminal || updatingTerminal" class="p-6">
+          <p class="text-sm mb-4 text-gray-600">Some Features may have one input and multiple outputs or vice versa. Define Terminals on features to better line up Connections.</p>
+          <label class="block tracking-wide text-gray-700 text-sm font-bold mb-2" for="grid-last-name">
+            Terminal Name
+          </label>
+          <input v-model="tmpTerminal.name" placeholder="Input" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm mb-4">
+          <div class="w-full">
+            <label class="block tracking-wide text-gray-700 text-sm font-bold mb-2">
+              Add Terminal to:
+            </label>
+          </div>
+          <div class="mb-4">
+            <label class="block tracking-wide text-gray-500 text-xs font-bold mb-2" for="terminal-feature">
+              Feature
+            </label>
+            <span class="relative flex">
+              <select v-model="tmpTerminal.feature" name="terminal-feature" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
+                <option v-for="(feature, index) in features" :key="index" :value="sanitizeText(feature.name)">{{ feature.name }}</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+              </div>
+            </span>
+          </div>
+          <div class="w-full">
+            <label class="block tracking-wide text-gray-700 text-sm font-bold mb-2">
+              Position
+            </label>
+          </div>
+          <div class="flex mb-4">
+            <div class="w-1/2 mr-4">
+              <label class="block tracking-wide text-gray-500 text-xs font-bold mb-2" for="terminal-position-side">
+                Side
+              </label>
+              <span class="relative flex">
+                <select v-model="tmpTerminal.position.side" name="terminal-position-side" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
+                  <option value="top">Top</option>
+                  <option value="right">Right</option>
+                  <option value="bottom">Bottom</option>
+                  <option value="left">Left</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </span>
+            </div>
+            <div class="w-1/2">
+              <label class="block tracking-wide text-gray-500 text-xs font-bold mb-2" for="terminal-position-specific">
+                Position on Side
+              </label>
+              <span class="relative flex">
+                <select v-model="tmpTerminal.position.specific" name="terminal-position-specific" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
+                  <option value="beginning">Beginning</option>
+                  <option value="middle">Middle</option>
+                  <option value="end">End</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </span>
+            </div>
+          </div>
+          <div class="flex justify-between mt-12">
+            <div class="">
+              <button v-on:click="deleteTerminal" v-if="updatingTerminal" class="bg-white bg-red-400 hover:bg-red-600 text-white border border-red-400 hover:border-transparent mr-4 text-sm font-bold py-2 px-4 rounded">Delete</button>
+            </div>
+            <div class="">
+              <button v-on:click="cancelTerminal" class="bg-white hover:bg-red-500 text-gray-600 border border-blue-500 hover:border-transparent hover:text-white mr-4 text-sm font-bold py-2 px-4 rounded">Cancel</button>
+              <button v-on:click="addTerminal" v-if="addingTerminal && !updatingTerminal" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Add Terminal</button>
+              <button v-on:click="updateTerminal" v-if="updatingTerminal" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Update Terminal</button>
+            </div>
           </div>
         </div>
       </div>
@@ -278,8 +366,6 @@
         </div>
       </div>
 
-      <button v-on:click="showConnections = !showConnections" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded">Toggle Connections</button>
-
     </div>
 
   </div>
@@ -329,6 +415,18 @@ export default {
           border: '#000000'
         }
       };
+    },
+    addTerminal: function () {
+
+    },
+    editTerminal: function () {
+
+    },
+    updateTerminal: function () {
+
+    },
+    cancelTerminal: function () {
+      
     },
     addConnection: function () {
       this.$cookies.set('connections', JSON.stringify([ ...this.connections, this.tmpConnection ]));
@@ -409,6 +507,16 @@ export default {
           border: '#000000'
         }
       },
+      addingTerminal: false,
+      updatingTerminal: false,
+      tmpTerminal: {
+        name: '',
+        feature: '',
+        position: {
+          side: 'top',
+          specific: 'middle'
+        }
+      },
       showConnections: false,
       addingConnection: false,
       updatingConnection: false,
@@ -443,6 +551,9 @@ export default {
         transform: `scale(${this.areaScale})`
       }
     }
+  },
+  mounted: function () {
+    this.showConnections = true;
   }
 }
 </script>
