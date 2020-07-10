@@ -16,9 +16,16 @@
         </button>
       </div>
       <div id="workspace" class="bg-gray-100 border-4 border-gray-400 relative" :style="[workspaceSize, areaScale]">
-        <div v-for="(feature, index) in features" :key="index" :id="`${sanitizeText(feature.name)}-${index}`" v-on:click="editFeature(index)" class="flex justify-center items-center text-center absolute cursor-pointer p-2" :style="featureStyles(index)">
+        <Moveable
+          v-for="(feature, index) in features" :key="index" :id="`${sanitizeText(feature.name)}-${index}`" v-on:click="editFeature(index)" class="flex justify-center items-center text-center absolute cursor-pointer p-2" :style="featureStyles(index)"
+          v-bind="moveable"
+          @drag="handleDrag"
+        >
           <p class="text-xs">{{ feature.name }}</p>
-        </div>
+        </Moveable>
+        <!-- <div v-for="(feature, index) in features" :key="index" :id="`${sanitizeText(feature.name)}-${index}`" v-on:click="editFeature(index)" class="flex justify-center items-center text-center absolute cursor-pointer p-2" :style="featureStyles(index)">
+          <p class="text-xs">{{ feature.name }}</p>
+        </div> -->
       </div>
     </div>
 
@@ -218,12 +225,14 @@
 </template>
 
 <script>
+import Moveable from 'vue-moveable';
 // import Area from './components/Area.vue'
 // import Controls from './components/Controls.vue'
 
 export default {
   name: 'App',
   components: {
+    Moveable,
     // Area,
     // Controls
   },
@@ -239,6 +248,13 @@ export default {
     },
   },
   methods: {
+    handleDrag: function ({ target, left, top }) {
+      console.log('onDrag left, top', left, top);
+      left = left / 10;
+      top = top / 10;
+      target.style.left = `${left}em`;
+      target.style.top = `${top}em`;
+    },
     addFeature: function () {
       this.$cookies.set('features', JSON.stringify([ ...this.features, this.tmpFeature ]));
       this.features = [ ...this.features, this.tmpFeature ];
@@ -325,6 +341,14 @@ export default {
   },
   data() {
     return {
+      moveable: {
+        draggable: true,
+        throttleDrag: 0,
+        resizable: false,
+        keepRatio: true,
+        scalable: false,
+        rotatable: false,
+      },
       addingDimensions: true,
       workspaceWidth: this.$cookies.get('workspaceWidth') ? JSON.parse(this.$cookies.get('workspaceWidth')) : 50,
       workspaceHeight: this.$cookies.get('workspaceHeight') ? JSON.parse(this.$cookies.get('workspaceHeight')) : 20,
@@ -482,5 +506,9 @@ export default {
 #area,
 #workspace {
   font-size: 10px;
+}
+
+.moveable-line {
+  background: transparent !important;
 }
 </style>
