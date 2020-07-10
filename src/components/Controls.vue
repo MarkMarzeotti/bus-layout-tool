@@ -5,37 +5,17 @@
 
       <div class="flex">
         <div class="w-1/2 mr-6">
-          <label class="block tracking-wide text-gray-700 text-xs font-medium mb-2" for="workspaceWidth">
-            Width
-          </label>
-          <span class="flex">
-            <input v-model="$store.state.workspaceWidth" id="workspaceWidth" name="workspaceWidth" placeholder="55" class="appearance-none block w-full bg-white text-gray-700 border border-r-1 border-gray-300 rounded rounded-r-none py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
-            <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm">
-              inches
-            </span>
-          </span>
+          <InchInput label="Width" placeholder="20" labelClass="text-gray-700 text-sm" :value="$store.state.workspaceWidth" @input="(width) => {$store.state.workspaceWidth = width}" />
         </div>
         <div class="w-1/2">
-          <label class="block tracking-wide text-gray-700 text-xs font-medium mb-2" for="workspaceHeight">
-            Height
-          </label>
-          <span class="flex">
-            <input v-model="$store.state.workspaceHeight" id="workspaceHeight" name="workspaceHeight" placeholder="25" class="appearance-none block w-full bg-white text-gray-700 border border-r-1 border-gray-300 rounded rounded-r-none py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
-            <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm">
-              inches
-            </span>
-          </span>
+          <InchInput label="Height" placeholder="40" labelClass="text-gray-700 text-sm" :value="$store.state.workspaceHeight" @input="(height) => {$store.state.workspaceHeight = height}" />
         </div>
       </div>
       
     </Panel>
 
     <Panel title="Features">
-
-      <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2" for="grid-last-name">
-        Feature Name
-      </label>
-      <input v-model="$store.state.tmpFeature.name" placeholder="Main Circuit Breaker" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm mb-4">
+      <SimpleInput label="Feature Name" placeholder="Main Circuit Breaker" :value="$store.state.tmpFeature.name" @input="(name) => {$store.state.tmpFeature.name = name}" />
       <div class="w-full">
         <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2">
           Size
@@ -43,26 +23,10 @@
       </div>
       <div class="flex mb-4">
         <div class="w-1/2 mr-6">
-          <label class="block tracking-wide text-gray-500 text-xs font-medium mb-2" for="feature-width">
-            Width
-          </label>
-          <span class="flex">
-            <input v-model="$store.state.tmpFeature.size.width" placeholder="55" name="feature-width" class="appearance-none block w-full bg-white text-gray-700 border border-r-1 border-gray-300 rounded rounded-r-none py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
-            <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm">
-              inches
-            </span>
-          </span>
+          <InchInput label="Width" placeholder="55" labelClass="text-gray-500 text-xs" :value="$store.state.tmpFeature.size.width" @input="(width) => {$store.state.tmpFeature.size.width = width}" />
         </div>
         <div class="w-1/2">
-          <label class="block tracking-wide text-gray-500 text-xs font-medium mb-2" for="feature-height">
-            Height
-          </label>
-          <span class="flex">
-            <input v-model="$store.state.tmpFeature.size.height" placeholder="25" name="feature-height" class="appearance-none block w-full bg-white text-gray-700 border border-r-1 border-gray-300 rounded rounded-r-none py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
-            <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm">
-              inches
-            </span>
-          </span>
+          <InchInput label="Height" placeholder="22" labelClass="text-gray-500 text-xs" :value="$store.state.tmpFeature.size.height" @input="(height) => {$store.state.tmpFeature.size.height = height}" />
         </div>
       </div>
       <div class="w-full">
@@ -72,26 +36,10 @@
       </div>
       <div class="flex mb-4">
         <div class="w-1/2 mr-6">
-          <label class="block tracking-wide text-gray-500 text-xs font-medium mb-2" for="feature-position-left">
-            Left
-          </label>
-          <span class="flex">
-            <input v-model="$store.state.tmpFeature.position.left" placeholder="0" name="feature-position-left" class="appearance-none block w-full bg-white text-gray-700 border border-r-1 border-gray-300 rounded rounded-r-none py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
-            <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm">
-              inches
-            </span>
-          </span>
+          <InchInput label="Left" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.tmpFeature.position.left" @input="(left) => {$store.state.tmpFeature.position.left = left}" />
         </div>
         <div class="w-1/2">
-          <label class="block tracking-wide text-gray-500 text-xs font-medium mb-2" for="feature-position-right">
-            Top
-          </label>
-          <span class="flex">
-            <input v-model="$store.state.tmpFeature.position.top" placeholder="0" name="feature-position-right" class="appearance-none block w-full bg-white text-gray-700 border border-r-1 border-gray-300 rounded rounded-r-none py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
-            <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm">
-              inches
-            </span>
-          </span>
+          <InchInput label="Top" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.tmpFeature.position.top" @input="(top) => {$store.state.tmpFeature.position.top = top}" />
         </div>
       </div>
       <div class="w-full">
@@ -101,32 +49,10 @@
       </div>
       <div class="flex mb-4">
         <div class="w-1/2 mr-6">
-          <label class="block tracking-wide text-gray-500 text-xs font-medium mb-2" for="feature-color-background">
-            Background
-          </label>
-          <span class="relative flex">
-            <div class="w-circle h-circle mr-4 my-auto border rounded-full" :style="backgroundSelect"></div>
-            <select v-model="$store.state.tmpFeature.color.background" name="feature-color-background" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
-              <option v-for="(color, index) in colors" :value="color.hex" :key="index">{{ color.name }}</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
-          </span>
+          <ColorSelect label="Background" :value="$store.state.tmpFeature.color.background" @input="(background) => {$store.state.tmpFeature.color.background = background}" />
         </div>
         <div class="w-1/2">
-          <label class="block tracking-wide text-gray-500 text-xs font-medium mb-2" for="feature-color-border">
-            Border
-          </label>
-          <span class="relative flex">
-            <div class="w-circle h-circle mr-4 my-auto border rounded-full" :style="borderSelect"></div>
-            <select v-model="$store.state.tmpFeature.color.border" name="feature-color-border" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
-              <option v-for="(color, index) in colors" :value="color.hex" :key="index">{{ color.name }}</option>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
-          </span>
+          <ColorSelect label="Border" :value="$store.state.tmpFeature.color.border" @input="(border) => {$store.state.tmpFeature.color.border = border}" />
         </div>
       </div>
       <div class="flex justify-between">
@@ -175,11 +101,17 @@
 
 <script>
 import Panel from './Panel/Panel.vue';
+import SimpleInput from './Panel/SimpleInput.vue';
+import InchInput from './Panel/InchInput.vue';
+import ColorSelect from './Panel/ColorSelect.vue';
 
 export default {
   name: 'Controls',
   components: {
-    Panel
+    Panel,
+    SimpleInput,
+    InchInput,
+    ColorSelect
   },
   methods: {
     addFeature: function () {
@@ -261,118 +193,8 @@ export default {
       },
       tmpSave: {
         name: ''
-      },
-      colors: [
-        {
-          hex: '#ffffff',
-          name: 'White'
-        },
-        {
-          hex: '#a8a8a8',
-          name: 'Silver Chalice'
-        },
-        {
-          hex: '#545454',
-          name: 'Emperor'
-        },
-        {
-          hex: '#000000',
-          name: 'Black'
-        },
-        {
-          hex: '#017f7e',
-          name: 'Teal'
-        },
-        {
-          hex: '#01ffff',
-          name: 'Cyan / Aqua'
-        },
-        {
-          hex: '#401f00',
-          name: 'Morocco Brown'
-        },
-        {
-          hex: '#804000',
-          name: 'Cinnamon'
-        },
-        {
-          hex: '#00497e',
-          name: 'Congress Blue'
-        },
-        {
-          hex: '#0094fe',
-          name: 'Azure Radiance'
-        },
-        {
-          hex: '#800001',
-          name: 'Maroon'
-        },
-        {
-          hex: '#fe0000',
-          name: 'Red'
-        },
-        {
-          hex: '#001280',
-          name: 'Navy Blue'
-        },
-        {
-          hex: '#0026ff',
-          name: 'Blue'
-        },
-        {
-          hex: '#803400',
-          name: 'Red Beech'
-        },
-        {
-          hex: '#fe6a00',
-          name: 'Blaze Orange'
-        },
-        {
-          hex: '#590080',
-          name: 'Pigment Indigo'
-        },
-        {
-          hex: '#b100fe',
-          name: 'Electric Violet'
-        },
-        {
-          hex: '#806b00',
-          name: 'Olive'
-        },
-        {
-          hex: '#ffd800',
-          name: 'School bus Yellow'
-        },
-        {
-          hex: '#7f0037',
-          name: 'Siren'
-        },
-        {
-          hex: '#ff006e',
-          name: 'Rose'
-        },
-        {
-          hex: '#017f01',
-          name: 'Japanese Laurel'
-        },
-        {
-          hex: '#00ff01',
-          name: 'Green'
-        }
-      ],
+      }
     }
-  },
-  computed: {
-    backgroundSelect() {
-      return {
-        backgroundColor: `${this.$store.state.tmpFeature.color.background}`
-      }
-    },
-    borderSelect() {
-      return {
-        backgroundColor: `${this.$store.state.tmpFeature.color.border}`
-      }
-    },
   }
 }
 </script>
