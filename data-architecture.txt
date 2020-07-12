@@ -1,0 +1,60 @@
+Data architecture
+
+global data store and saves to cookies
+
+startingState: {
+    saves: [
+        {
+            saveName: 'untitled',
+            workspace: {
+                height: 48,
+                width: 48,
+                scale: 1
+            }
+            features: []
+        }
+    ],
+    editingSave: 0,
+    editingFeature: false
+}
+
+exampleState: {
+    saves: [
+        {
+            saveName: 'floorplan',
+            workspace: {
+                height: 87,
+                width: 210,
+                scale: .25
+            }
+            features: [
+                {
+                    name: 'couch',
+                    size: {
+                        height: 24,
+                        width: 56
+                    },
+                    position: {
+                        left: 90,
+                        top: 0
+                    },
+                    color: {
+                        background: '#804000',
+                        border: '#000000'
+                    }
+                }
+            ]
+        },
+        {
+            saveName: 'untitled',
+            workspace: {
+                height: 10,
+                width: 10,
+                scale: 1
+            }
+            features: []
+        }
+    ],
+    editingSave: 1,
+    editingFeature: 1
+}

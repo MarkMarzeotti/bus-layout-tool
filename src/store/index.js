@@ -6,43 +6,33 @@ Vue.use(Vuex);
  
 export default new Vuex.Store({
   state: {
-    workspaceWidth: cookie.get('workspaceWidth') ? JSON.parse(cookie.get('workspaceWidth')) : 50,
-    workspaceHeight: cookie.get('workspaceHeight') ? JSON.parse(cookie.get('workspaceHeight')) : 20,
-    workspaceScale: cookie.get('workspaceScale') ? JSON.parse(cookie.get('workspaceScale')) : 1,
-    tmpFeature: {
-      name: '',
-      size: {
-        height: null,
-        width: null
-      },
-      position: {
-        left: null,
-        top: null
-      },
-      color: {
-        background: '#ffffff',
-        border: '#000000'
+    saves: cookie.get('saves') ? JSON.parse(cookie.get('saves')) : [
+      {
+        name: '',
+        workspace: {
+          height: '48',
+          width: '48',
+          scale: 1
+        },
+        features: []
       }
-    },
-    features: cookie.get('features') ? JSON.parse(cookie.get('features')) : [],
-    tmpSave: {
-      name: ''
-    },
-    saves: cookie.get('saves') ? JSON.parse(cookie.get('saves')) : []
+    ],
+    editingSave: cookie.get('editingSave') ? JSON.parse(cookie.get('editingSave')) : 0,
+    editingFeature: cookie.get('editingFeature') ? JSON.parse(cookie.get('editingFeature')) : false
   },
   getters: {
-    featureSize: (state) => (index) => {
-      return state.features[index].size;
-    },
-    featurePosition: (state) => (index) => {
-      return state.features[index].position;
-    },
-    featureMaxPosition: (state) => (index) => {
-      const left = state.workspaceWidth - state.features[index].size.width;
-      const top = state.workspaceHeight - state.features[index].size.height
+    // featureSize: (state) => (index) => {
+    //   return state.features[index].size;
+    // },
+    // featurePosition: (state) => (index) => {
+    //   return state.features[index].position;
+    // },
+    // featureMaxPosition: (state) => (index) => {
+    //   const left = state.workspaceWidth - state.features[index].size.width;
+    //   const top = state.workspaceHeight - state.features[index].size.height
       
-      return {left, top};
-    },
+    //   return {left, top};
+    // },
   },
   mutations: {},
   actions: {}
