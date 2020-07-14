@@ -1,12 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import cookie from 'vue-cookies';
- 
+import VueCookies from 'vue-cookies';
+
+Vue.use(VueCookies); 
 Vue.use(Vuex);
+
+const cookieSaves = Vue.$cookies.get('saves');
+const cookieEditingSave = Vue.$cookies.get('editingSave') !== 'false' ? parseInt(Vue.$cookies.get('editingSave')) : false;
+const cookieEditingFeature = Vue.$cookies.get('editingFeature') !== 'false' ? parseInt(Vue.$cookies.get('editingFeature')) : false;
+console.log(cookieSaves, cookieEditingSave, cookieEditingFeature);
  
 export default new Vuex.Store({
   state: {
-    saves: cookie.get('saves') ? JSON.parse(cookie.get('saves')) : [
+    saves: Vue.$cookies.get('saves') ? JSON.parse(Vue.$cookies.get('saves')) : [
       {
         name: '',
         workspace: {
@@ -17,8 +23,8 @@ export default new Vuex.Store({
         features: []
       }
     ],
-    editingSave: cookie.get('editingSave') ? JSON.parse(cookie.get('editingSave')) : 0,
-    editingFeature: cookie.get('editingFeature') ? JSON.parse(cookie.get('editingFeature')) : false
+    editingSave: cookieEditingSave,
+    editingFeature: Vue.$cookies.get('editingFeature') !== 'false' ? Vue.$cookies.get('editingFeature') : false
   },
   getters: {
     // featureSize: (state) => (index) => {
