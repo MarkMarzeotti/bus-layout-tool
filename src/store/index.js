@@ -5,26 +5,15 @@ import VueCookies from 'vue-cookies';
 Vue.use(VueCookies); 
 Vue.use(Vuex);
 
-const cookieSaves = Vue.$cookies.get('saves');
-const cookieEditingSave = Vue.$cookies.get('editingSave') !== 'false' ? parseInt(Vue.$cookies.get('editingSave')) : false;
-const cookieEditingFeature = Vue.$cookies.get('editingFeature') !== 'false' ? parseInt(Vue.$cookies.get('editingFeature')) : false;
-console.log(cookieSaves, cookieEditingSave, cookieEditingFeature);
+const cookieSaves = Vue.$cookies.get('saves') ? JSON.parse(Vue.$cookies.get('saves')) : [];
+const cookieEditingSave = Vue.$cookies.get('editingSave') && Vue.$cookies.get('editingSave') !== 'false' ? parseInt(Vue.$cookies.get('editingSave')) : false;
+const cookieEditingFeature = Vue.$cookies.get('editingFeature') && Vue.$cookies.get('editingFeature') !== 'false' ? parseInt(Vue.$cookies.get('editingFeature')) : false;
  
 export default new Vuex.Store({
   state: {
-    saves: Vue.$cookies.get('saves') ? JSON.parse(Vue.$cookies.get('saves')) : [
-      {
-        name: '',
-        workspace: {
-          height: '48',
-          width: '48',
-          scale: 1
-        },
-        features: []
-      }
-    ],
+    saves: cookieSaves,
     editingSave: cookieEditingSave,
-    editingFeature: Vue.$cookies.get('editingFeature') !== 'false' ? Vue.$cookies.get('editingFeature') : false
+    editingFeature: cookieEditingFeature
   },
   getters: {
     // featureSize: (state) => (index) => {
@@ -38,8 +27,24 @@ export default new Vuex.Store({
     //   const top = state.workspaceHeight - state.features[index].size.height
       
     //   return {left, top};
-    // },
+    // }
   },
-  mutations: {},
+  mutations: {
+    saveWorkspaces (state, saves) {
+      state.saves = saves;
+      Vue.$cookies.set('saves', JSON.stringify(saves));
+      console.log(saves);
+    },
+    saveEditingSave (state, index) {
+      state.editingSave = index;
+      Vue.$cookies.set('editingSave', index);
+      console.log(index);
+    },
+    saveEditingFeature (state, index) {
+      state.editingFeature = index;
+      Vue.$cookies.set('editingFeature', index);
+      console.log(index);
+    }
+  },
   actions: {}
 });

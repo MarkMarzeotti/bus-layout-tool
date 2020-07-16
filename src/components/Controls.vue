@@ -3,7 +3,7 @@
 
     <Panel title="Workspace">
       <div v-if="$store.state.editingSave !== false">
-        <SimpleInput label="Layout Name" placeholder="Floor plan" :value="$store.state.saves[$store.state.editingSave].name" @input="(name) => {$store.state.saves[$store.state.editingSave].name = name}" />
+        <SimpleInput label="Layout Name" placeholder="Floor plan" :value="$store.state.saves[$store.state.editingSave].name" @input="(name) => {saves[editingSave].name = name}" />
         <div class="w-full">
           <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2">
             Size
@@ -11,10 +11,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Width" placeholder="20" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.width" @input="(width) => {$store.state.saves[$store.state.editingSave].workspace.width = width}" />
+            <InchInput label="Width" placeholder="20" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.width" @input="(width) => {saves[editingSave].workspace.width = width}" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Height" placeholder="40" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.height" @input="(height) => {$store.state.saves[$store.state.editingSave].workspace.height = height}" />
+            <InchInput label="Height" placeholder="40" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.height" @input="(height) => {saves[editingSave].workspace.height = height}" />
           </div>
         </div>
       </div>
@@ -24,6 +24,7 @@
           <li v-for="(save, index) in $store.state.saves" :key="index" class="flex justify-between tracking-wide text-gray-500 text-sm mb-4">
             <span>{{ save.name }}</span>
             <div>
+              <button v-on:click="copyWorkspace(index)" class="bg-gray-200 text-gray-600 hover:bg-gray-400 mr-2 py-1 px-3 rounded text-sm font-medium transition-colors duration-300">Duplicate</button>
               <button v-on:click="editWorkspace(index)" class="bg-gray-200 text-gray-600 hover:bg-gray-400 mr-2 py-1 px-3 rounded text-sm font-medium transition-colors duration-300">Load</button>
               <button v-on:click="deleteWorkspace(index)" class="bg-gray-200 text-gray-600 hover:bg-gray-400 py-1 px-2 rounded text-sm font-medium transition-colors duration-300">Delete</button>
             </div>
@@ -38,8 +39,8 @@
     </Panel>
 
     <Panel title="Add/Edit Features">
-      <div v-if="$store.state.editingFeature !== false">
-        <SimpleInput label="Feature Name" placeholder="Main Circuit Breaker" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].name" @input="(name) => {$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].name = name}" />
+      <div v-if="$store.state.editingFeature !== false && $store.state.editingSave !== false">
+        <SimpleInput label="Feature Name" placeholder="Main Circuit Breaker" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].name" @input="(name) => {saves[editingSave].features[editingFeature].name = name; updateFeature();}" />
         <div class="w-full">
           <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2">
             Size
@@ -47,10 +48,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Width" placeholder="55" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.width" @input="(width) => {$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.width = width}" />
+            <InchInput label="Width" placeholder="55" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.width" @input="(width) => {saves[editingSave].features[editingFeature].size.width = width; updateFeature();}" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Height" placeholder="22" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.height" @input="(height) => {$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.height = height}" />
+            <InchInput label="Height" placeholder="22" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.height" @input="(height) => {saves[editingSave].features[editingFeature].size.height = height; updateFeature();}" />
           </div>
         </div>
         <div class="w-full">
@@ -60,10 +61,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Left" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.left" @input="(left) => {$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.left = left}" />
+            <InchInput label="Left" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.left" @input="(left) => {saves[editingSave].features[editingFeature].position.left = left; updateFeature();}" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Top" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.top" @input="(top) => {$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.top = top}" />
+            <InchInput label="Top" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.top" @input="(top) => {saves[editingSave].features[editingFeature].position.top = top; updateFeature();}" />
           </div>
         </div>
         <div class="w-full">
@@ -73,16 +74,16 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <ColorSelect label="Background" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.background" @input="(background) => {$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.background = background}" />
+            <ColorSelect label="Background" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.background" @input="(background) => {saves[editingSave].features[editingFeature].color.background = background; updateFeature();}" />
           </div>
           <div class="w-1/2">
-            <ColorSelect label="Border" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.border" @input="(border) => {$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.border = border}" />
+            <ColorSelect label="Border" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.border" @input="(border) => {saves[editingSave].features[editingFeature].color.border = border; updateFeature();}" />
           </div>
         </div>
       </div>
       <p v-if="$store.state.editingSave === false" class="text-gray-500 text-sm">Select or create a Workspace.</p>
       <p v-if="$store.state.editingFeature === false && $store.state.editingSave !== false && $store.state.saves[$store.state.editingSave].features.length" class="text-gray-500 text-sm mb-4">Click on an existing feature to edit it.</p>
-      <div class="flex justify-end">
+      <div v-if="$store.state.editingSave !== false" class="flex justify-end">
         <button v-on:click="deleteFeature" v-if="$store.state.editingFeature !== false" class="bg-red-500 hover:bg-red-700 text-white border border-transparent mr-2 text-sm font-medium py-2 px-4 rounded transition-colors duration-300">Delete Feature</button>
         <button v-on:click="saveFeature" v-if="$store.state.editingFeature !== false" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-300">Save Feature</button>
         <button v-on:click="addFeature" v-if="$store.state.editingFeature === false && $store.state.editingSave !== false" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-300">Add Feature</button>
@@ -92,12 +93,12 @@
 
     <!-- <Panel title="Save">
 
-      <div v-if="$store.state.saves.length" class="mb-6">
+      <div v-if="saves.length" class="mb-6">
         <p class="block tracking-wide text-gray-700 text-sm font-medium mb-2" for="grid-last-name">
           Saved Workspaces
         </p>
         <ul class="">
-          <li v-for="(save, index) in $store.state.saves" :key="save.name" class="flex mb-4">
+          <li v-for="(save, index) in saves" :key="save.name" class="flex mb-4">
             <span class="flex-grow text-sm text-gray-600">{{ save.name }}</span>
             <button v-on:click="loadSave(index)" class="bg-gray-300 hover:bg-gray-400 text-gray-800 text-sm py-1 px-4 mr-2 rounded inline-flex items-center">
               <span>Load</span>
@@ -111,7 +112,7 @@
       <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2" for="grid-last-name">
         Workspace Name
       </label>
-      <input v-model="$store.state.tmpSave.name" placeholder="Electrical Layout" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm mb-4">
+      <input v-model="tmpSave.name" placeholder="Electrical Layout" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm mb-4">
       <div class="flex justify-end">
         <button v-on:click="addSave" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded">Save Workspace</button>
       </div>
@@ -138,7 +139,7 @@ export default {
   methods: {
     addFeature: function () {
       const newIndex = this.$store.state.saves[this.$store.state.editingSave].features.length;
-      this.$store.state.saves[this.$store.state.editingSave].features = [ 
+      this.saves[this.editingSave].features = [ 
         ...this.$store.state.saves[this.$store.state.editingSave].features, 
         {
           name: '',
@@ -156,87 +157,84 @@ export default {
           }
         } 
       ];
-      this.$store.state.editingFeature = newIndex;
-      this.$cookies.set('saves', JSON.stringify(this.$store.state.saves));
-      this.$cookies.set('editingFeature', this.$store.state.editingFeature);
-
-      const cookieSaves = this.$cookies.get('saves');
-      const cookieEditingSave = this.$cookies.get('editingSave');
-      const cookieEditingFeature = this.$cookies.get('editingFeature');
-      console.log(cookieSaves, cookieEditingSave, cookieEditingFeature);
+      this.editingFeature = newIndex;
+      this.$store.commit('saveWorkspaces', this.saves);
+      this.$store.commit('saveEditingFeature', this.editingFeature);
     },
     saveFeature: function () {
-      this.$store.state.editingFeature = false;
-      this.$cookies.set('editingFeature', this.$store.state.editingFeature);
+      this.editingFeature = false;
+      this.$store.commit('saveEditingFeature', this.editingFeature);
     },
     editFeature: function (index) {
-      this.$store.state.editingFeature = index;
-      this.$cookies.set('editingFeature', this.$store.state.editingFeature);
+      this.editingFeature = index;
+      this.$store.commit('saveEditingFeature', this.editingFeature);
+    },
+    updateFeature: function () {
+      this.$store.commit('saveWorkspaces', this.saves);
     },
     deleteFeature: function () {
-      this.$store.state.saves[this.$store.state.editingSave].features.splice(this.$store.state.editingFeature, 1);
-      this.$store.state.editingFeature = false;
-      this.$cookies.set('saves', JSON.stringify(this.$store.state.saves));
-      this.$cookies.set('editingFeature', this.$store.state.editingFeature);
+      this.saves[this.editingSave].features.splice(this.editingFeature, 1);
+      this.editingFeature = false;
+      this.$store.commit('saveWorkspaces', this.saves);
+      this.$store.commit('saveEditingFeature', this.editingFeature);
     },
     addWorkspace: function () {
       const newIndex = this.$store.state.saves.length;
-      this.$store.state.saves = [ 
+      this.saves = [ 
         ...this.$store.state.saves, 
         {
-          saveName: 'untitled',
+          name: '',
           workspace: {
-            height: 10,
-            width: 10,
+            height: 48,
+            width: 48,
             scale: 1
           },
           features: []
         }
       ];
-      this.$store.state.editingSave = newIndex;
-      this.$cookies.set('saves', JSON.stringify(this.$store.state.saves));
-      this.$cookies.set('editingSave', this.$store.state.editingSave);
+      this.editingSave = newIndex;
+      this.$store.commit('saveWorkspaces', this.saves);
+      this.$store.commit('saveEditingSave', this.editingSave);
     },
     saveWorkspace: function () {
       if (this.$store.state.saves[this.$store.state.editingSave].name) {
-        this.$store.state.editingSave = false;
-        this.$cookies.set('editingSave', this.$store.state.editingSave);
+        this.editingSave = false;
+        this.editingFeature = false;
+        this.$store.commit('saveWorkspaces', this.saves);
+        this.$store.commit('saveEditingSave', this.editingSave);
+        this.$store.commit('saveEditingFeature', this.editingFeature);
       } else {
         alert('Name the Workspace in order to save it!');
       }
     },
     editWorkspace: function (index) {
-      this.$store.state.editingSave = index;
-      this.$cookies.set('editingSave', this.$store.state.editingSave);
+      this.editingSave = index;
+      this.$store.commit('saveEditingSave', this.editingSave);
     },
     deleteWorkspace: function (index) {
-      this.$store.state.saves.splice(index, 1);
-      this.$store.state.editingSave = false;
-      this.$cookies.set('saves', JSON.stringify(this.$store.state.saves));
-      this.$cookies.set('editingSave', this.$store.state.editingSave);
+      this.saves.splice(index, 1);
+      this.editingSave = false;
+      this.$store.commit('saveWorkspaces', this.saves);
+      this.$store.commit('saveEditingSave', this.editingSave);
     },
+    copyWorkspace: function (index) {
+      const newIndex = this.$store.state.saves.length;
+      const duplicatedWorkspace = { ...this.$store.state.saves[index] };
+      duplicatedWorkspace.name = `${duplicatedWorkspace.name} copy`;
+      this.saves = [ 
+        ...this.$store.state.saves, 
+        duplicatedWorkspace
+      ];
+      this.editingSave = newIndex;
+      this.$store.commit('saveWorkspaces', this.saves);
+      this.$store.commit('saveEditingSave', this.editingSave);
+    }
   },
   data() {
     return {
-      // updatingFeature: false,
-      // tmpFeature: {
-      //   name: '',
-      //   size: {
-      //     height: null,
-      //     width: null
-      //   },
-      //   position: {
-      //     left: null,
-      //     top: null
-      //   },
-      //   color: {
-      //     background: '#ffffff',
-      //     border: '#000000'
-      //   }
-      // },
-      // tmpSave: {
-      //   name: ''
-      // }
+      saves: this.$store.state.saves,
+      editingSave: this.$store.state.editingSave,
+      editingFeature: this.$store.state.editingFeature
     }
   }
 }

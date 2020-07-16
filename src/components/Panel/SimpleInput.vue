@@ -21,7 +21,7 @@ export default {
     },
     value: {
       type: String,
-      required: true
+      required: false
     },
     labelClass: {
       type: String,

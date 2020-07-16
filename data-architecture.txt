@@ -5,7 +5,7 @@ global data store and saves to cookies
 startingState: {
     saves: [
         {
-            saveName: 'untitled',
+            name: 'untitled',
             workspace: {
                 height: 48,
                 width: 48,
@@ -21,7 +21,7 @@ startingState: {
 exampleState: {
     saves: [
         {
-            saveName: 'floorplan',
+            name: 'floorplan',
             workspace: {
                 height: 87,
                 width: 210,
@@ -46,7 +46,7 @@ exampleState: {
             ]
         },
         {
-            saveName: 'untitled',
+            name: 'untitled',
             workspace: {
                 height: 10,
                 width: 10,
