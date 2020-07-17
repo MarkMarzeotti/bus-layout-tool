@@ -3,7 +3,7 @@
 
     <Panel title="Workspace">
       <div v-if="$store.state.editingSave !== false">
-        <SimpleInput label="Layout Name" placeholder="Floor plan" :value="$store.state.saves[$store.state.editingSave].name" @input="(name) => {saves[editingSave].name = name}" />
+        <SimpleInput label="Layout Name" placeholder="Floor plan" :value="$store.state.saves[$store.state.editingSave].name" @input="(name) => {saves[editingSave].name = name; updateSaves();}" />
         <div class="w-full">
           <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2">
             Size
@@ -11,16 +11,16 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Width" placeholder="20" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.width" @input="(width) => {saves[editingSave].workspace.width = width}" />
+            <InchInput label="Width" placeholder="20" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.width" @input="(width) => {saves[editingSave].workspace.width = width; updateSaves();}" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Height" placeholder="40" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.height" @input="(height) => {saves[editingSave].workspace.height = height}" />
+            <InchInput label="Height" placeholder="40" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.height" @input="(height) => {saves[editingSave].workspace.height = height; updateSaves();}" />
           </div>
         </div>
       </div>
       <div v-else>
         <h2 v-if="$store.state.saves.length" class="tracking-wide text-gray-700 text-sm font-medium mb-2">Load a Workspace</h2>
-        <ul class="my-6">
+        <ul v-if="$store.state.saves.length" class="my-6">
           <li v-for="(save, index) in $store.state.saves" :key="index" class="flex justify-between tracking-wide text-gray-500 text-sm mb-4">
             <span>{{ save.name }}</span>
             <div>
@@ -40,7 +40,7 @@
 
     <Panel title="Add/Edit Features">
       <div v-if="$store.state.editingFeature !== false && $store.state.editingSave !== false">
-        <SimpleInput label="Feature Name" placeholder="Main Circuit Breaker" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].name" @input="(name) => {saves[editingSave].features[editingFeature].name = name; updateFeature();}" />
+        <SimpleInput label="Feature Name" placeholder="Main Circuit Breaker" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].name" @input="(name) => {saves[editingSave].features[editingFeature].name = name; updateSaves();}" />
         <div class="w-full">
           <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2">
             Size
@@ -48,10 +48,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Width" placeholder="55" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.width" @input="(width) => {saves[editingSave].features[editingFeature].size.width = width; updateFeature();}" />
+            <InchInput label="Width" placeholder="55" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.width" @input="(width) => {saves[editingSave].features[editingFeature].size.width = width; updateSaves();}" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Height" placeholder="22" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.height" @input="(height) => {saves[editingSave].features[editingFeature].size.height = height; updateFeature();}" />
+            <InchInput label="Height" placeholder="22" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.height" @input="(height) => {saves[editingSave].features[editingFeature].size.height = height; updateSaves();}" />
           </div>
         </div>
         <div class="w-full">
@@ -61,10 +61,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Left" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.left" @input="(left) => {saves[editingSave].features[editingFeature].position.left = left; updateFeature();}" />
+            <InchInput label="Left" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.left" @input="(left) => {saves[editingSave].features[editingFeature].position.left = left; updateSaves();}" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Top" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.top" @input="(top) => {saves[editingSave].features[editingFeature].position.top = top; updateFeature();}" />
+            <InchInput label="Top" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.top" @input="(top) => {saves[editingSave].features[editingFeature].position.top = top; updateSaves();}" />
           </div>
         </div>
         <div class="w-full">
@@ -74,10 +74,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <ColorSelect label="Background" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.background" @input="(background) => {saves[editingSave].features[editingFeature].color.background = background; updateFeature();}" />
+            <ColorSelect label="Background" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.background" @input="(background) => {saves[editingSave].features[editingFeature].color.background = background; updateSaves();}" />
           </div>
           <div class="w-1/2">
-            <ColorSelect label="Border" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.border" @input="(border) => {saves[editingSave].features[editingFeature].color.border = border; updateFeature();}" />
+            <ColorSelect label="Border" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.border" @input="(border) => {saves[editingSave].features[editingFeature].color.border = border; updateSaves();}" />
           </div>
         </div>
       </div>
@@ -169,9 +169,6 @@ export default {
       this.editingFeature = index;
       this.$store.commit('saveEditingFeature', this.editingFeature);
     },
-    updateFeature: function () {
-      this.$store.commit('saveWorkspaces', this.saves);
-    },
     deleteFeature: function () {
       this.saves[this.editingSave].features.splice(this.editingFeature, 1);
       this.editingFeature = false;
@@ -187,7 +184,7 @@ export default {
           workspace: {
             height: 48,
             width: 48,
-            scale: 1
+            scale: 10
           },
           features: []
         }
@@ -228,7 +225,10 @@ export default {
       this.editingSave = newIndex;
       this.$store.commit('saveWorkspaces', this.saves);
       this.$store.commit('saveEditingSave', this.editingSave);
-    }
+    },
+    updateSaves: function () {
+      this.$store.commit('saveWorkspaces', this.saves);
+    },
   },
   data() {
     return {

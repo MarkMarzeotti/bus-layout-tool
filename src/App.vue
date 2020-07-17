@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="flex items-stretch h-screen">
+  <div id="app" class="flex items-stretch h-screen overflow-hidden">
     
     <Workspace ref="workspace" />
 
@@ -22,4 +22,7 @@ export default {
 </script>
 
 <style>
+body {
+  overflow: hidden;
+}
 </style>
