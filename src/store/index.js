@@ -27,6 +27,30 @@ export default new Vuex.Store({
     // }
   },
   mutations: {
+    updateName (state, name) {
+      state.saves[state.editingSave].features[state.editingFeature].name = name;
+    },
+    updateSizeWidth (state, width) {
+      state.saves[state.editingSave].features[state.editingFeature].size.width = width;
+    },
+    updateSizeHeight (state, height) {
+      state.saves[state.editingSave].features[state.editingFeature].size.height = height;
+    },
+    updatePosition (state, position) {
+      state.saves[state.editingSave].features[state.editingFeature].position = position;
+    },
+    updatePositionLeft (state, value) {
+      state.saves[state.editingSave].features[state.editingFeature].position.left = value;
+    },
+    updatePositionTop (state, value) {
+      state.saves[state.editingSave].features[state.editingFeature].position.top = value;
+    },
+    updateColorBackground (state, value) {
+      state.saves[state.editingSave].features[state.editingFeature].color.background = value;
+    },
+    updateColorBorder (state, value) {
+      state.saves[state.editingSave].features[state.editingFeature].color.border = value;
+    },
     saveWorkspaces (state, saves) {
       state.saves = saves;
       console.log(state.saves, state.editingSave, state.editingFeature);
@@ -39,15 +63,15 @@ export default new Vuex.Store({
       state.editingFeature = index;
       console.log(state.saves, state.editingSave, state.editingFeature);
     },
-    // fix (state) {
-    //   console.log(state.saves);
-    //   const saves = [];
-    //   for (const save in state.saves) {
-    //     saves.push(state.saves[save]);
-    //   }
-    //   state.saves = saves;
-    //   console.log(state.saves);
-    // }
+    fix (state) {
+      console.log(state.saves);
+      const saves = [];
+      for (const save in state.saves) {
+        saves.push(state.saves[save]);
+      }
+      state.saves = saves;
+      console.log(state.saves);
+    }
   },
   actions: {},
   plugins: [createPersistedState()]

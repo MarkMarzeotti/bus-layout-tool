@@ -65,10 +65,11 @@ export default {
         top = top / this.$store.state.saves[this.$store.state.editingSave].workspace.scale;
         top = top < 0 ? 0 : top;
         top = top > this.$store.state.saves[this.$store.state.editingSave].workspace.height - this.$store.state.saves[this.$store.state.editingSave].features[index].size.height ? this.$store.state.saves[this.$store.state.editingSave].workspace.height - this.$store.state.saves[this.$store.state.editingSave].features[index].size.height : top;
-        const saves = [ ...this.$store.state.saves ];
-        saves[this.$store.state.editingSave].features[index].position.left = left;
-        saves[this.$store.state.editingSave].features[index].position.top = top;
-        this.$store.commit('saveWorkspaces', saves);
+        const position = {
+          left,
+          top
+        }
+        this.$store.commit('updatePosition', position);
       }
     },
     featureStyles: function (index) {

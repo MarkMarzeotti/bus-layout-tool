@@ -52,11 +52,7 @@
 
     <Panel title="Add/Edit Features">
       <div v-if="$store.state.editingFeature !== false && $store.state.editingSave !== false">
-        <SimpleInput label="Feature Name" placeholder="Main Circuit Breaker" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].name" @input="(name) => {
-          const saves = [ ...$store.state.saves ]; 
-          saves[$store.state.editingSave].features[editingFeature].name = name;
-          $store.commit('saveWorkspaces', saves);
-        }" />
+        <SimpleInput v-model="name" label="Feature Name" placeholder="Main Circuit Breaker" />
         <div class="w-full">
           <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2">
             Size
@@ -64,18 +60,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Width" placeholder="55" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.width" @input="(width) => {
-              const saves = [ ...$store.state.saves ]; 
-              saves[$store.state.editingSave].features[editingFeature].size.width = width;
-              $store.commit('saveWorkspaces', saves);
-            }" />
+            <InchInput v-model="sizeWidth" label="Width" placeholder="55" labelClass="text-gray-500 text-xs" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Height" placeholder="22" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].size.height" @input="(height) => {
-              const saves = [ ...$store.state.saves ]; 
-              saves[$store.state.editingSave].features[editingFeature].size.height = height;
-              $store.commit('saveWorkspaces', saves);
-            }" />
+            <InchInput v-model="sizeHeight" label="Height" placeholder="22" labelClass="text-gray-500 text-xs" />
           </div>
         </div>
         <div class="w-full">
@@ -85,18 +73,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Left" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.left" @input="(left) => {
-              const saves = [ ...$store.state.saves ]; 
-              saves[$store.state.editingSave].features[editingFeature].position.left = left;
-              $store.commit('saveWorkspaces', saves);
-            }" />
+            <InchInput v-model="positionLeft" label="Left" placeholder="0" labelClass="text-gray-500 text-xs" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Top" placeholder="0" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].position.top" @input="(top) => {
-              const saves = [ ...$store.state.saves ]; 
-              saves[$store.state.editingSave].features[editingFeature].position.top = top;
-              $store.commit('saveWorkspaces', saves);
-            }" />
+            <InchInput v-model="positionTop" label="Top" placeholder="0" labelClass="text-gray-500 text-xs" />
           </div>
         </div>
         <div class="w-full">
@@ -106,18 +86,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <ColorSelect label="Background" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.background" @input="(background) => {
-              const saves = [ ...$store.state.saves ]; 
-              saves[$store.state.editingSave].features[editingFeature].color.background = background;
-              $store.commit('saveWorkspaces', saves);
-            }" />
+            <ColorSelect v-model="colorBackground" label="Background" />
           </div>
           <div class="w-1/2">
-            <ColorSelect label="Border" :value="$store.state.saves[$store.state.editingSave].features[$store.state.editingFeature].color.border" @input="(border) => {
-              const saves = [ ...$store.state.saves ]; 
-              saves[$store.state.editingSave].features[editingFeature].color.border = border;
-              $store.commit('saveWorkspaces', saves);
-            }" />
+            <ColorSelect v-model="colorBorder" label="Border" />
           </div>
         </div>
       </div>
@@ -138,7 +110,7 @@
       </div>
 
       <div v-if="$store.state.editingSave !== false" class="flex justify-end">
-        <button v-on:click="deleteFeature" v-if="$store.state.editingFeature !== false" class="bg-red-500 hover:bg-red-700 text-white border border-transparent mr-2 text-sm font-medium py-2 px-4 rounded transition-colors duration-300">Delete Feature</button>
+        <button v-on:click="deleteFeature(false)" v-if="$store.state.editingFeature !== false" class="bg-red-500 hover:bg-red-700 text-white border border-transparent mr-2 text-sm font-medium py-2 px-4 rounded transition-colors duration-300">Delete Feature</button>
         <button v-on:click="saveFeature" v-if="$store.state.editingFeature !== false" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-300">Save Feature</button>
         <button v-on:click="addFeature" v-if="$store.state.editingFeature === false && $store.state.editingSave !== false" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-2 px-4 rounded transition-colors duration-300">Add Feature</button>
       </div>
@@ -162,29 +134,90 @@ export default {
     InchInput,
     ColorSelect
   },
+  data() {
+    return {
+      message: 'meow',
+    }
+  },
+  computed: {
+    name: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].features[this.$store.state.editingFeature].name;
+      },
+      set(value) {
+        this.$store.commit('updateName', value);
+      },
+    },
+    sizeWidth: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].features[this.$store.state.editingFeature].size.width;
+      },
+      set(value) {
+        this.$store.commit('updateSizeWidth', value);
+      },
+    },
+    sizeHeight: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].features[this.$store.state.editingFeature].size.height;
+      },
+      set(value) {
+        this.$store.commit('updateSizeHeight', value);
+      },
+    },
+    positionLeft: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].features[this.$store.state.editingFeature].position.left;
+      },
+      set(value) {
+        this.$store.commit('updatePositionLeft', value);
+      },
+    },
+    positionTop: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].features[this.$store.state.editingFeature].position.top;
+      },
+      set(value) {
+        this.$store.commit('updatePositionTop', value);
+      },
+    },
+    colorBackground: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].features[this.$store.state.editingFeature].color.background;
+      },
+      set(value) {
+        this.$store.commit('updateColorBackground', value);
+      },
+    },
+    colorBorder: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].features[this.$store.state.editingFeature].color.border;
+      },
+      set(value) {
+        this.$store.commit('updateColorBorder', value);
+      },
+    },
+  },
   methods: {
     addFeature: function () {
       const newIndex = this.$store.state.saves[this.$store.state.editingSave].features.length;
-      const saves = { ...this.$store.state.saves };
-      saves[this.$store.state.editingSave].features = [ 
-        ...this.$store.state.saves[this.$store.state.editingSave].features, 
-        {
-          name: '',
-          size: {
-              height: null,
-              width: null
-          },
-          position: {
-              left: null,
-              top: null
-          },
-          color: {
-              background: '#ffffff',
-              border: '#000000'
-          }
-        } 
-      ];
-      this.$store.commit('saveWorkspaces', saves);
+      const newSaves = [ ...this.$store.state.saves ];
+      const newFeature = {
+        name: '',
+        size: {
+            height: null,
+            width: null
+        },
+        position: {
+            left: null,
+            top: null
+        },
+        color: {
+            background: '#ffffff',
+            border: '#000000'
+        }
+      };
+      newSaves[this.$store.state.editingSave].features.push(newFeature);
+      this.$store.commit('saveWorkspaces', newSaves);
       this.$store.commit('saveEditingFeature', newIndex);
     },
     saveFeature: function () {
@@ -193,18 +226,18 @@ export default {
     editFeature: function (index) {
       this.$store.commit('saveEditingFeature', index);
     },
-    deleteFeature: function (index = false) {
+    deleteFeature: function (index) {
       const deleteIndex = index !== false ? index : this.$store.state.editingFeature;
-      const saves = { ...this.$store.state.saves };
-      saves[this.$store.state.editingSave].features.splice(deleteIndex, 1);
-      this.$store.commit('saveWorkspaces', saves);
+      const newSaves = [ ...this.$store.state.saves ];
+      newSaves[this.$store.state.editingSave].features.splice(deleteIndex, 1);
+      this.$store.commit('saveWorkspaces', newSaves);
       this.$store.commit('saveEditingFeature', false);
     },
     copyFeature: function (index) {
       const newIndex = this.$store.state.saves[this.$store.state.editingSave].features.length;
       const duplicatedFeature = { ...this.$store.state.saves[this.$store.state.editingSave].features[index] };
       duplicatedFeature.name = `${duplicatedFeature.name} copy`;
-      const saves = { ...this.$store.state.saves };
+      const saves = [ ...this.$store.state.saves ];
       saves[this.$store.state.editingSave].features = [ 
         ...this.$store.state.saves[this.$store.state.editingSave].features, 
         duplicatedFeature
@@ -241,7 +274,7 @@ export default {
       this.$store.commit('saveEditingSave', index);
     },
     deleteWorkspace: function (index) {
-      const saves = { ...this.$store.state.saves };
+      const saves = [ ...this.$store.state.saves ];
       saves.splice(index, 1);
       this.$store.commit('saveEditingFeature', false);
       this.$store.commit('saveEditingSave', false);

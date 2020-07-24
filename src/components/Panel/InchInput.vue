@@ -4,7 +4,7 @@
       {{ label }}
     </label>
     <span class="flex">
-      <input v-model="inputValue" :placeholder="placeholder" :name="sanitizeText(label)" class="appearance-none block w-full bg-white text-gray-700 border border-r-1 border-gray-300 rounded rounded-r-none py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
+      <input v-model="content" :placeholder="placeholder" :name="sanitizeText(label)" class="appearance-none block w-full bg-white text-gray-700 border border-r-1 border-gray-300 rounded rounded-r-none py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
       <span class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-300 bg-gray-200 text-gray-500 text-sm">
         inches
       </span>
@@ -33,15 +33,15 @@ export default {
       default: 'text-gray-700 text-sm'
     }
   },
-  data() {
-    return {
-      inputValue: this.value
-    }
+  computed: {
+    content: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        this.$emit('input', value)
+      },
+    },
   },
-  watch: {
-    inputValue() {
-      this.$emit('input', this.inputValue);
-    }
-  }
 }
 </script>

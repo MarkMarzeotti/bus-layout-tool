@@ -5,7 +5,7 @@
     </label>
     <span class="relative flex">
       <div class="w-circle h-circle mr-4 my-auto border rounded-full" :style="indicatorSelect"></div>
-      <select v-model="inputValue" :name="sanitizeText(label)" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
+      <select v-model="content" :name="sanitizeText(label)" class="appearance-none block w-full bg-white text-gray-700 border border-gray-300 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm">
         <option v-for="(color, index) in colors" :value="color.hex" :key="index">{{ color.name }}</option>
       </select>
       <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
@@ -30,7 +30,6 @@ export default {
   },
   data() {
     return {
-      inputValue: this.value,
       colors: [
         {
           hex: '#ffffff',
@@ -131,15 +130,18 @@ export default {
       ],
     }
   },
-  watch: {
-    inputValue() {
-      this.$emit('input', this.inputValue);
-    }
-  },
   computed: {
+    content: {
+      get() {
+        return this.value;
+      },
+      set(value) {
+        this.$emit('input', value)
+      },
+    },
     indicatorSelect() {
       return {
-        backgroundColor: `${this.inputValue}`
+        backgroundColor: `${this.content}`
       }
     }
   }
