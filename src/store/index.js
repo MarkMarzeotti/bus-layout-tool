@@ -29,13 +29,25 @@ export default new Vuex.Store({
   mutations: {
     saveWorkspaces (state, saves) {
       state.saves = saves;
+      console.log(state.saves, state.editingSave, state.editingFeature);
     },
     saveEditingSave (state, index) {
       state.editingSave = index;
+      console.log(state.saves, state.editingSave, state.editingFeature);
     },
     saveEditingFeature (state, index) {
       state.editingFeature = index;
-    }
+      console.log(state.saves, state.editingSave, state.editingFeature);
+    },
+    // fix (state) {
+    //   console.log(state.saves);
+    //   const saves = [];
+    //   for (const save in state.saves) {
+    //     saves.push(state.saves[save]);
+    //   }
+    //   state.saves = saves;
+    //   console.log(state.saves);
+    // }
   },
   actions: {},
   plugins: [createPersistedState()]

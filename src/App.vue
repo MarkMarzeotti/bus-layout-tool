@@ -14,6 +14,12 @@ import Controls from './components/Controls.vue';
 
 export default {
   name: 'App',
+  mounted() {
+    // console.log(this.$store.state);
+    // this.$store.commit('saveEditingFeature', false);
+    // this.$store.commit('saveEditingSave', false);
+    // this.$store.commit('fix');
+  },
   components: {
     Workspace,
     Controls
