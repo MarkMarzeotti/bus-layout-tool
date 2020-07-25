@@ -14,6 +14,15 @@ export default new Vuex.Store({
     editingFeature: false
   },
   mutations: {
+    updateWorkspaceName (state, value) {
+      state.saves[state.editingSave].name = value;
+    },
+    updateWorkspaceWidth (state, value) {
+      state.saves[state.editingSave].workspace.width = value;
+    },
+    updateWorkspaceHeight (state, value) {
+      state.saves[state.editingSave].workspace.height = value;
+    },
     updateName (state, name) {
       state.saves[state.editingSave].features[state.editingFeature].name = name;
     },
@@ -38,6 +47,56 @@ export default new Vuex.Store({
     updateColorBorder (state, value) {
       state.saves[state.editingSave].features[state.editingFeature].color.border = value;
     },
+    addFeature (state) {
+      const newIndex = state.saves[state.editingSave].features.length;
+      const newFeature = {
+        name: '',
+        size: {
+            height: null,
+            width: null
+        },
+        position: {
+            left: null,
+            top: null
+        },
+        color: {
+            background: '#ffffff',
+            border: '#000000'
+        }
+      };
+      state.saves[state.editingSave].features.push(newFeature);
+      state.editingFeature = newIndex;
+    },
+    deleteFeature (state, index) {
+      state.saves[state.editingSave].features.splice(index, 1);
+    },
+    copyFeature (state, index) {
+      const duplicatedFeature = JSON.parse(JSON.stringify(state.saves[state.editingSave].features[index]));
+      duplicatedFeature.name = `${duplicatedFeature.name} copy`;
+      state.saves[state.editingSave].features.push(duplicatedFeature);
+    },
+    addWorkspace (state) {
+      const newIndex = state.saves.length;
+      const newWorkspace = {
+        name: '',
+        workspace: {
+          height: 48,
+          width: 48,
+          scale: 10
+        },
+        features: []
+      };
+      state.saves.push(newWorkspace);
+      state.editingWorkspace = newIndex;
+    },
+    deleteWorkspace (state, index) {
+      state.saves.splice(index, 1);
+    },
+    copyWorkspace (state, index) {
+      const duplicatedWorkspace = JSON.parse(JSON.stringify(state.saves[index]));
+      duplicatedWorkspace.name = `${duplicatedWorkspace.name} copy`;
+      state.saves.push(duplicatedWorkspace);
+    },
     saveWorkspaces (state, saves) {
       state.saves = saves;
       console.log(state.saves, state.editingSave, state.editingFeature);
@@ -50,6 +109,15 @@ export default new Vuex.Store({
       state.editingFeature = index;
       console.log(state.saves, state.editingSave, state.editingFeature);
     },
+    zoomIn (state) {
+      state.saves[state.editingSave].workspace.scale = state.saves[state.editingSave].workspace.scale - 1;
+    },
+    zoomOut (state) {
+      state.saves[state.editingSave].workspace.scale = state.saves[state.editingSave].workspace.scale + 1;
+    },
+    clearWorkspace (state) {
+      state.saves[state.editingSave].features = [];
+    }
   },
   plugins: [createPersistedState()]
 });

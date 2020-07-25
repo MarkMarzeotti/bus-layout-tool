@@ -36,29 +36,19 @@ export default {
   },
   methods: {
     zoomOut: function () {
-      if (this.$store.state.editingSave !== false) {
-        const saves = [ ...this.$store.state.saves ];
-        saves[this.$store.state.editingSave].workspace.scale = this.$store.state.saves[this.$store.state.editingSave].workspace.scale - 1;
-        this.$store.commit('saveWorkspaces', saves);
-      }
+      this.$store.commit('zoomIn');
     },
     zoomIn: function () {
-      if (this.$store.state.editingSave !== false) {
-        const saves = [ ...this.$store.state.saves ];
-        saves[this.$store.state.editingSave].workspace.scale = this.$store.state.saves[this.$store.state.editingSave].workspace.scale + 1;
-        this.$store.commit('saveWorkspaces', saves);
-      }
+      this.$store.commit('zoomOut');
     },
     clearWorkspace: function () {
-      if (this.$store.state.editingSave !== false) {
-        const saves = [ ...this.$store.state.saves ];
-        saves[this.$store.state.editingSave].features = [];
-        this.$store.commit('saveWorkspaces', saves);
-      }
+      this.$store.commit('saveEditingFeature', false);
+      this.$store.commit('clearWorkspace');
     },
     handleDrag: function ({target, top, left}) {
       if (this.$store.state.editingSave !== false) {
-        const index = target.childNodes[0].dataset.index;
+        const index = parseInt(target.childNodes[0].dataset.index);
+        this.$store.commit('saveEditingFeature', index);
         left = left / this.$store.state.saves[this.$store.state.editingSave].workspace.scale;
         left = left < 0 ? 0 : left;
         left = left > this.$store.state.saves[this.$store.state.editingSave].workspace.width - this.$store.state.saves[this.$store.state.editingSave].features[index].size.width ? this.$store.state.saves[this.$store.state.editingSave].workspace.width - this.$store.state.saves[this.$store.state.editingSave].features[index].size.width : left;

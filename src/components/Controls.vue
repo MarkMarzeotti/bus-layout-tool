@@ -3,11 +3,7 @@
 
     <Panel title="Workspace">
       <div v-if="$store.state.editingSave !== false">
-        <SimpleInput label="Layout Name" placeholder="Floor plan" :value="$store.state.saves[$store.state.editingSave].name" @input="(name) => {
-          const saves = [ ...$store.state.saves ]; 
-          saves[$store.state.editingSave].name = name; 
-          $store.commit('saveWorkspaces', saves);
-        }" />
+        <SimpleInput v-model="workspaceName" label="Layout Name" placeholder="Floor plan" />
         <div class="w-full">
           <label class="block tracking-wide text-gray-700 text-sm font-medium mb-2">
             Size
@@ -15,18 +11,10 @@
         </div>
         <div class="flex mb-4">
           <div class="w-1/2 mr-6">
-            <InchInput label="Width" placeholder="20" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.width" @input="(width) => {
-              const saves = [ ...$store.state.saves ]; 
-              saves[$store.state.editingSave].workspace.width = width;
-              $store.commit('saveWorkspaces', saves);
-            }" />
+            <InchInput v-model="workspaceWidth" label="Width" placeholder="20" labelClass="text-gray-500 text-xs" />
           </div>
           <div class="w-1/2">
-            <InchInput label="Height" placeholder="40" labelClass="text-gray-500 text-xs" :value="$store.state.saves[$store.state.editingSave].workspace.height" @input="(height) => {
-              const saves = [ ...$store.state.saves ]; 
-              saves[$store.state.editingSave].workspace.height = height;
-              $store.commit('saveWorkspaces', saves);
-            }" />
+            <InchInput v-model="workspaceHeight" label="Height" placeholder="40" labelClass="text-gray-500 text-xs" />
           </div>
         </div>
       </div>
@@ -196,29 +184,34 @@ export default {
         this.$store.commit('updateColorBorder', value);
       },
     },
+    workspaceName: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].name;
+      },
+      set(value) {
+        this.$store.commit('updateWorkspaceName', value);
+      },
+    },
+    workspaceWidth: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].workspace.width;
+      },
+      set(value) {
+        this.$store.commit('updateWorkspaceWidth', value);
+      },
+    },
+    workspaceHeight: {
+      get() {
+        return this.$store.state.saves[this.$store.state.editingSave].workspace.height;
+      },
+      set(value) {
+        this.$store.commit('updateWorkspaceHeight', value);
+      },
+    },
   },
   methods: {
     addFeature: function () {
-      const newIndex = this.$store.state.saves[this.$store.state.editingSave].features.length;
-      const newSaves = [ ...this.$store.state.saves ];
-      const newFeature = {
-        name: '',
-        size: {
-            height: null,
-            width: null
-        },
-        position: {
-            left: null,
-            top: null
-        },
-        color: {
-            background: '#ffffff',
-            border: '#000000'
-        }
-      };
-      newSaves[this.$store.state.editingSave].features.push(newFeature);
-      this.$store.commit('saveWorkspaces', newSaves);
-      this.$store.commit('saveEditingFeature', newIndex);
+      this.$store.commit('addFeature');
     },
     saveFeature: function () {
       this.$store.commit('saveEditingFeature', false);
@@ -228,39 +221,16 @@ export default {
     },
     deleteFeature: function (index) {
       const deleteIndex = index !== false ? index : this.$store.state.editingFeature;
-      const newSaves = [ ...this.$store.state.saves ];
-      newSaves[this.$store.state.editingSave].features.splice(deleteIndex, 1);
-      this.$store.commit('saveWorkspaces', newSaves);
+      this.$store.commit('deleteFeature', deleteIndex);
       this.$store.commit('saveEditingFeature', false);
     },
     copyFeature: function (index) {
       const newIndex = this.$store.state.saves[this.$store.state.editingSave].features.length;
-      const duplicatedFeature = { ...this.$store.state.saves[this.$store.state.editingSave].features[index] };
-      duplicatedFeature.name = `${duplicatedFeature.name} copy`;
-      const saves = [ ...this.$store.state.saves ];
-      saves[this.$store.state.editingSave].features = [ 
-        ...this.$store.state.saves[this.$store.state.editingSave].features, 
-        duplicatedFeature
-      ];
-      this.$store.commit('saveWorkspaces', saves);
+      this.$store.commit('copyFeature', index);
       this.$store.commit('saveEditingFeature', newIndex);
     },
     addWorkspace: function () {
-      const newIndex = this.$store.state.saves.length;
-      const saves = [ 
-        ...this.$store.state.saves, 
-        {
-          name: '',
-          workspace: {
-            height: 48,
-            width: 48,
-            scale: 10
-          },
-          features: []
-        }
-      ];
-      this.$store.commit('saveWorkspaces', saves);
-      this.$store.commit('saveEditingSave', newIndex);
+      this.$store.commit('addWorkspace');
     },
     saveWorkspace: function () {
       if (this.$store.state.saves[this.$store.state.editingSave].name) {
@@ -274,21 +244,14 @@ export default {
       this.$store.commit('saveEditingSave', index);
     },
     deleteWorkspace: function (index) {
-      const saves = [ ...this.$store.state.saves ];
-      saves.splice(index, 1);
+      const deleteIndex = index !== false ? index : this.$store.state.editingSave;
+      this.$store.commit('deleteWorkspace', deleteIndex);
       this.$store.commit('saveEditingFeature', false);
       this.$store.commit('saveEditingSave', false);
-      this.$store.commit('saveWorkspaces', saves);
     },
     copyWorkspace: function (index) {
       const newIndex = this.$store.state.saves.length;
-      const duplicatedWorkspace = { ...this.$store.state.saves[index] };
-      duplicatedWorkspace.name = `${duplicatedWorkspace.name} copy`;
-      const saves = [ 
-        ...this.$store.state.saves, 
-        duplicatedWorkspace
-      ];
-      this.$store.commit('saveWorkspaces', saves);
+      this.$store.commit('copyWorkspace', index);
       this.$store.commit('saveEditingSave', newIndex);
     },
   }
