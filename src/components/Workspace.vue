@@ -1,5 +1,11 @@
 <template>
   <div id="area-container" class="w-8/12 h-full overflow-hidden relative" :style="areaZoom">
+    <div v-if="$store.state.editingSave === false" class="w-full h-full py-10 px-20 flex flex-col justify-center items-center">
+      <h2 class="text-gray-700 text-2xl mb-6">Select or create a Workspace.</h2>
+      <p class="text-gray-700 text-md mb-6">Add a workspace. It could be a floor plan or a wall or anything else you could imagine. Add features like furnature, paintings, electrical components, again anything you can think of.</p>
+      <p class="text-gray-700 text-md mb-6">I used this app to design the floor plan of our skoolie as well as the the onboard electrical system. It allowed me to experiment with different possibilities before actually attempting to build anything.</p>
+      <p class="text-gray-700 text-md mb-6">Add features and move them around. Save layouts and try different ones. Everything will be saved here for you when you return assuming you do not clear your cookies.</p>
+    </div>
     <div v-if="$store.state.editingSave !== false" class="z-50 absolute top-0 right-0 mt-4 mr-4 border border-gray-300 rounded items-stretch flex">
       <button v-on:click="zoomOut" class="bg-gray-200 text-gray-600 p-2 border-r-1 border-gray-300">
         <svg class="fill-current h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zM5 7h6v2H5V7z"/></svg>

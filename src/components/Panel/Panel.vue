@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 border-b-2 border-l-2 border-gray-300">
+  <div class="bg-gray-100 border-b-1 border-gray-300">
     <header class="bg-gray-200 px-6 border-b-1 border-gray-300 flex justify-between">
       <h2 class="uppercase tracking-wide text-gray-700 text-sm font-medium mb-0 py-4">{{ title }}</h2>
       <button v-on:click="panelOpen = !panelOpen" class="flex items-center px-2 py-3 text-gray-500">

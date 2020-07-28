@@ -5,13 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>Skoolie Layout Tool | A quick layout builder by Mark Marzeotti</title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but the Skoolie Layout Tool doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app">
+
+      <div class="w-full h-full py-10 px-20 flex flex-col justify-center items-center">
+        <h1 class="text-gray-700 text-2xl mb-6">The Skoolie Layout Tool</h1>
+        <p class="text-gray-700 text-md mb-6">The Skoolie Layout Tool is a simple layout builder built with Vue.js and Tailwind CSS by <a href="https://markmarzeotti.com" class="underline" target="_blank">Mark Marzeotti</a>.</p>
+        <p class="text-gray-700 text-md mb-6">Add a workspace. It could be a floor plan or a wall or anything else you could imagine. Add features like furnature, paintings, electrical components, again anything you can think of.</p>
+        <p class="text-gray-700 text-md mb-6">I used this app to design the floor plan of our skoolie as well as the the onboard electrical system. It allowed me to experiment with different possibilities before actually attempting to build anything.</p>
+        <p class="text-gray-700 text-md mb-6">Add features and move them around. Save layouts and try different ones. Everything will be saved here for you when you return assuming you do not clear your cookies.</p>
+      </div>
+
+    </div>
     <!-- built files will be auto injected -->
   </body>
 </html>
