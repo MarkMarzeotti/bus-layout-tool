@@ -108,7 +108,7 @@
     </div>
 
     <div class="p-6 text-center self-end w-full">
-      <p class="text-gray-600 text-sm">An experiment with Vue and Tailwind by <a href="https://markmarzeotti.com" class="underline" target="_blank">Mark Marzeotti</a></p>
+      <p class="text-gray-600 text-sm">Check out our Skoolie on <a href="https://www.instagram.com/theusinbus/" class="underline" target="_blank">Instagram</a> or on <a href="https://theusinbus.com/" class="underline" target="_blank">The Us In Bus blog</a>! This tool is an experiment with Vue and Tailwind by <a href="https://markmarzeotti.com" class="underline" target="_blank">Mark Marzeotti</a>.</p>
     </div>
 
   </div>
